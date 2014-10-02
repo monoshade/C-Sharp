@@ -1,0 +1,100 @@
+1-superclass->subclass
+	1:n
+=================================================================================================
+2-Polymorphism
+	References to base class is polymorphic. ( both pass by ref-type and ref )
+	virtual + override
+=================================================================================================
+3-Casting (Reference conversion)
+	a. Upcasting
+		a. From subclass to base reference (implicit, always ok)
+			Child c = new Child();
+			Base b = c;
+		b. Only affect refs, not underlying object (b,c points to identical object)
+		c. b has restricted view on the object (throw compile error)
+
+	b. Downcasting
+		a. From base to sub (explicit)
+			Child c2 = (Child)b;
+		b. Only affect refs, not underlying object
+		c. Throw runtime error if not compatible (InvalidCastException)
+		d. "Downcasting" means: "we are aware what is the underlying type", so exception is useful
+
+	c. "as" operator
+		a. Downcast
+			Child c3 = (Child)(new Base())
+		b. set null if not compatible (instead of exception)
+		c. Need to check "if c3==null" before use
+
+	d. "is" operator
+		a. Test: whether an object derives from a class(or implements an interface)
+			if(c3 is Base) {...}
+=================================================================================================
+4-Virtual Function
+	a. Mark as "virtual": 
+		a. subclass can override (use "override" keyword)
+		b. override is optional
+		c. polymorphic ref: will use the function of "real" type
+	b. Methods, properties, indexers, events can be virtual
+	c. Don't call virtual function in constructor
+	d. Only "virtual", "abstract" member can be overriden
+=================================================================================================
+5-Abstract Class
+	a. Use "abstract" keyword
+	b. Cannot be instantiated
+	c. Can be: 
+		fully/partially/not implemented.
+
+	d. Abstract member can only exists in Abstract class
+		a. Cannot provide default implementation (unlike virtual functions)
+		b. Can specify allowed accessors for Properties:
+			public abstract double Area { get; }
+
+	e. *** Abstract class cannot be instantiated until all abstract members are overriden ***
+=================================================================================================
+6-Hiding Inherited Members
+	public class A { public int Counter = 1; }
+	public class B : A { public int Counter = 2; }
+	a. Binding:
+		Ref -> A, bind to A.Counter (compile time)
+		Ref -> B, bind to B.Counter (compile time)
+	b. Suppress compiler warning
+		public class B : A { public new int Counter = 2; }
+	c. No Polymorphism:
+		refA.Counter will always pick A.Counter (new v.s. override)
+=================================================================================================
+7-Sealed
+	a. function:
+		public sealed override double Area {get{...}}
+		can be overriden by child
+	b. class:
+		public sealed class A {....}
+		seal all virtual functions
+	c. Can still hide
+=================================================================================================
+8-"base"
+	a. Call an overriden/hidden member from subclass (base.Counter)
+	b. Call base-class constructor
+		If child doesn't call base constructor explicitly, base's parameterless constructor is implicitly called
+		If base type don't have "accessible" parameterless constructor, Child has to call explicitly
+	c. Order:
+		1. Child's field
+		2. Evaluate args calling base constructor
+		3. Base's field
+		4. Base's constructor body
+		5. Child's constructor body
+=================================================================================================
+9-Overloading and Resolution
+	Static void Foo(Base b)
+	Static void Foo(Child c)
+
+	a. Static Binding(Compile time)
+		Base b = new Child();
+		Foo(b);			// call Foo(Base b)
+	b. Use dynamic casting to Dynamic Binding:
+		Foo((dynamic)b);
+
+
+
+
+

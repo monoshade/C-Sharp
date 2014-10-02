@@ -1,0 +1,25 @@
+1-list
+	public: 		Default for Enum / Interface
+	internal:		Default for non-nested types. Accessible within containing/friendly assembly.
+	private:		Default for class / struct members. Accessible within containing type.
+	protected:		Accessible within containing type / subclasses.
+	protected internal:	Union of two.
+
+2-Friend Assemblies
+	a. Adding System.Runtime.CompilerServices.InternalsVisibleTo assembly attribute:
+
+		[assembly: InernalsVisibleTo("FriendName")]
+
+	b. Add PublicKey if the friend assembely has strong name
+
+		[assembly: InernalsVisibleTo("StrongFriend, PublicKey=...")], or use
+
+		string key = 
+			string.Join("", Assembly.GetExecutingAssembly().GetName().GetPublicKey()
+				.Select(b=>b.ToString("x2"))
+				.ToArray());
+
+3-Accessibility Capping
+	a. Members has at most the same accessbility as the type (even if written as public)
+	b. Accessibility must be identical when overriding functions
+	c. Child cannot have more accessibility than Base

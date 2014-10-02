@@ -1,0 +1,40 @@
+1-For reference type: 
+	Use with downcasting/upcasting:
+		public class Stack {... object[] data; ...}
+		stack.Push("a string");
+		string s = (string)stack.Pop();
+==================================================================
+2-Boxing & Unboxing
+	a. Convert value-type <--> ref-type (class / interface)
+		Boxing: 
+			int x = 9; object obj = x;
+		Unboxing:
+			int y = int(obj);	// require explicit cast
+	b. Unboxing type must match exactly:
+		long y = obj;		// fail
+		long y = (int) obj; 	// success
+
+	c."Copy sematics"
+		Changing x/obj will not affect obj/x
+==================================================================
+3-ToString()
+	return the type name is not override
+==================================================================
+4-Members:
+	public class Object
+	{
+		public Object();
+
+		public extern Type GetType();
+
+		public virtual bool Equals(object obj);
+		public static bool Equals(object objA, object objB);
+		public static bool ReferenceEquals(object objA, object objB);
+
+		public virtual int GetHashCode();
+
+		public virtual string ToString();
+
+		protected virtual void Finalize();
+		protected extern object MemberwiseClone();
+	}

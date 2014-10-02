@@ -1,0 +1,66 @@
+1-Predefined Type:
+	Supported by compiler,
+	Alias Framework types in the System namespace,
+	.Net Framework contains more types than C# predefined (e.g DateTime)
+
+	Value Types:
+		Numeric (Signed integer, Unsigned integer, Real number)
+		Logical (bool)
+		Character (char)
+	Reference Types:
+		String (string)
+		Object (object)
+
+2-Instance vs Static Member
+	Instance Member:
+		Data/Function members that operates on the instance of a type
+	Static Member:
+		Data/Function members that operates on the type itself
+
+3-Conversions
+	Always creates a new value from an existing one.
+
+	Implicit conversion:
+		1-The compiler can guarantee they will always succeed
+		2-No information is lost
+	Explicit conversion:
+		1-The compiler cannot guarantee they will always fail
+	
+	Other conversions:
+		Reference conversion
+		Boxing conversion
+		Custom conversion
+
+4-Value vs Reference Types
+	(All types: value/reference/Generic/Pointer)
+	
+	Value types:
+		Build in(all numeric, char, bool)
+		Struct, Enum
+	Reference types:
+		Class, Interface, Array, string(predefined),
+		Delegate		
+
+	Value type:
+		An instance in memory, stores the value
+
+	Reference type:
+		Part 1: An object that stores the value, and Object Metadata
+			Metadata: 
+				Key to the object type, 
+				Lock state, 
+				GC flag
+		Part 2: A ref-type variable refs to the object.		
+
+	Assignment Operation(=)
+		Value type: copies the VALUE to a different storage
+		Ref type: copies the reference, not the object(multiple variables refs to the same object)
+
+	Reference can be null(value type ordinarily cannot)
+
+	Storage Overhead:
+		Value type: sum of each fields (may waste on "address alignment")
+		Ref type: (Depends on the .NET runtime implementation)
+			object: sum of each fields + Metadata
+			ref variable: 4 bytes(32 bit .NET) / 8 bytes(64 bit .NET)
+

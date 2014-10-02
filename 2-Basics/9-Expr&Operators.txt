@@ -1,0 +1,25 @@
+1-Void Expression:
+	has no value, e.g. Console.WriteLine(1)
+
+2-Assignment Expression:
+	Not a void expression
+	Value: whatever assigned:
+	y = 5 * (x = 2)		// y = 10
+
+3-Operator Precedence & Associativity:
+	a. Left associative oprators:
+		a. evaluated from left to right:
+			8 / 4 / 2  == (8 / 4) / 2 = 1
+		b. Includes:
+			Binary, except for 
+				assignment/lambda/null coalescing
+
+	b. Right associative
+		x = y = 3  ==  x = (y = 3)
+		Includes:
+			Assignment, 
+			lambda:			*=,/=,+=,-=,<<=,>>=,&=,^=,|=,>=
+			null coalescing:	??
+			Conditional operator:	||, &&, ?:
+
+Not all operators are overloadable, some need to be overloaded through other operators

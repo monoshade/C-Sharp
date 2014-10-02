@@ -1,0 +1,33 @@
+1-Identifier
+	class/method/variable names
+	Must be a whole word, Made up of unicode characters, Starting with a letter or underscore(not number)
+	Convention:
+		Camel case(myVari): param, local var, private field
+		Pascal case(MyMethod): all others
+
+2-Keywords
+	Compiler reserved, can't be used as identifiers (all lower case)
+	@ prefix:
+		avoid conflicts: class @class{}
+	Contextual Keywords:
+		can be used without @, but ambiguity cannot arise within its context
+
+3-Literals
+	12, "Hello"
+
+4-Punctuators
+	Demarcate the structure of the program
+	braces: {}
+	semicolon: ; (statement blocks do not require ;)
+
+5-Operator
+	Transform & Combine expressions
+	period: .
+	Parentheses: ()
+	Multiplication operator: *
+	Equal sign: =
+
+6-Comments
+	Source code documentation
+	Single-line: //
+	Multiline: /* */

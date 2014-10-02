@@ -1,0 +1,60 @@
+1-Variable:
+	local var, param(value, ref, out), field(instanfce, static), array element
+
+2-Stack:
+	local var, params
+	lifttime:
+		local block(function)
+	allocate/deallocate at the top of the stack
+
+3-heap:
+	objects(ref type instances)
+	allocate:
+		when a new object is created,
+		return a ref to that object
+	deallocate:
+		eligible when the obj is not reffed by anything
+		GC handled by RT
+
+	Also stores:
+		a. Value-type instances and object references when:
+			a. is a field of an object
+			b. is an array element
+		
+		b. static fields and constants:
+			live until the app domain is torn down
+
+
+4-Definite Assignment:
+	(in heap, 0; in stack, need to init)
+	
+	a. Local var must be init before read
+	b. Function args must be supplied to call
+	c. All other vars are atutomatically init by RT. (including Fields & array els)
+
+	check => compile error
+
+	Default value:
+		numeric & Enum: 0,	char:	'\0',
+		Ref type: null,		bool: false
+
+5-Parameters:
+	a. pass by:
+		value:		foo(int x)
+		ref-type:	foo(Object obj),	// set obj = null will not change the caller ref, cp the ref-type variable value
+		reference:	foo(ref Object obj)	// set obj = null will change the caller ref, aliasing the storage
+	b. out
+		same as ref, but needn't be assigned before going into the func
+
+	c. params
+		last parameter of method args
+		must declare as array:	foo(params int[] args)
+
+	d. optional args
+		cannot be ref/out
+		after mandaroty args, before params
+		must use constant / parameterless constructor of a VALUE type
+
+	e. Named args (when calling)
+		must after positional args
+

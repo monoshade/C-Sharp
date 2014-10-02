@@ -1,0 +1,42 @@
+Detail in Ch6
+=========================================================
+Char
+1-Storage:
+	char: 2 bytes (unicode character)
+
+2-Escape sequence:
+	backslash "\" + O	null
+	\b			backspace
+	\n			newline
+	\r			Carriage return
+	\t			Horizontal tab
+	\v			Vertical tab
+
+	\u(\x):	specify by value
+	'\u000A' == '\n'
+
+3-Conversion
+	Implicit:
+		char => numeric, when target type >= unsigned short
+	otherwise, explicit
+
+========================================================
+String
+1-Type
+	represent immutable sequence of Unicode characters
+
+2-Escape sequence:
+	normal:
+		string s1 = "\\\\server\\fileshare\\helloworld.cs"
+	verbatim literal:
+		a. string s2 = @"\\server\fileshare\helloworld.cs"
+		b. No support for escape sequence, but can type directly:
+			"abc\tefg" == @"abc	efg"
+		c. double-quote, type twice:
+			@"id=""123""" => id="123"
+		
+3-Concatenation:
+	+:	one operand can be nonstring (.toString() will be called)
+
+4-Comparison:
+	<>: not supported, call CompareTo()

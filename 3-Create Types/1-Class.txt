@@ -1,0 +1,125 @@
+1. Non-nested class:
+	[Attributes]
+	public / internal / abstract / sealed / static / unsafe / partial  class MyClass <T> : base, interfaces 
+	{
+		methods / properties / indexers / events / fields
+		constructors / overloaded operators
+		nested typeds / finalizer
+	}
+	*** no: protected/private/protected ***
+=====================================================================================
+2. Field:
+	a variable. (Has default value)
+	b. Modifiers:
+		static (usually: static readonly)
+		public / internal / private / protected
+		new (inheritance)
+		unsafe
+		readonly
+		volatile
+=====================================================================================
+3. Method
+	a. Signature (no return type)
+	b. Modifiers
+		static
+		public / internal / private / protected
+		new / virtual / abstract / override / sealed
+		partial
+		unsafe / extern
+	c. Overload
+		signature must different
+		pass-by-value / pass-by-ref is also signature (ref, out cannot coexist)
+=====================================================================================
+4. Instance Constructor
+	a. Implicit Parameterless Constructor:
+		Compiler will generate iff you don't define any Constructor
+		Intrinsic to structs, you can't define in struct
+	b. Modifiers:
+		public / internal / private / protected
+		unsafe / extern
+	c. Overload
+		public Class1 (int x) {X = x}
+		public Class1 (int x, int y) : this (x) {Y = y}
+	d. Init Order:
+		Field first (in declared order)
+		called constructor / base second
+		constructor
+	e. Object Initializer:
+		Bunny b1 = new Bunny {Name = "Bo", LikeCarrot = true}	// call public Bunny() {}
+		Bunny b2 = new Bunny ("Bo") {LikeCarrot = false}		// call public Bunny(string n) {Name = n;}
+=====================================================================================
+5. Property
+	a. Modifiers
+		same as Method, no partial
+	b. Read-only
+		only specify GET, or use:
+			private set {...}
+	c. Implementation:
+		CLR: get_xxx, set_xxx
+		WinRT: put_xxx, set_xxx
+=====================================================================================		
+6. Indexers
+	a. Implement:
+			class sentence{
+				string[] words = "Default value".Split();
+				
+				public string this [int i] {
+					get {return words[i];}
+					set {words[i] = value;}
+				}
+			}
+	b. CLR:
+			compile to: get_Item(int i), set_Item(int i, string value)
+=====================================================================================
+7. Constant
+	a. one of:
+		built-in numerics, bool, char, string, Enum
+			public const string Message = "Hello World";
+	b. More restrictive than static readonly field
+			a. limited type to use
+			b. compile time evaluation
+				Problem:	
+					Assembly X has const c, assembly Y references X, 
+					X change c and recompile will not reflect to Y until Y recompile
+	c. Modifiers:
+		(for non-local constant)
+			public / internal / private / protected
+			new
+=====================================================================================
+8. Static Constructor
+	a. A type can only have one, must be parameterless
+	b. Triggered:
+			Instantiating the type
+			Accessing a static member in the type
+	c. Modifiers:
+			unsafe, extern
+	d. Static Field init time:
+			With Static Constructor:
+				Right before the static constructor is called
+			Without Static Constructor:
+				Earlier, any time before the type used
+=====================================================================================
+9. Static Class
+	a. only contain static members
+	b. cannot be subclassed (System.Math)
+=====================================================================================
+10. Finalizer
+	a. class-only methods
+			class Class1{ ~ Class1() {} }
+		Compile to:
+			protected override void Finalizer(){ ... base.Finalize(); }
+	b. execute right before GC
+=====================================================================================
+11. Partial Type
+	a. each part must use "partial" keyword
+	b. cannot have conflict members
+	c. resolved at compile time
+	d. Use Base Class:
+		for each partial	<==>
+		only for one partial part
+=====================================================================================
+12. Partial Method
+	a. must be void and is implicitly private
+	b. Definition + Implementation
+		a. Definition is usually written by a code generator, imp is manually authored
+		b. If no Implementation, the definition will be compiled away (as the code that calls it)

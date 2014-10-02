@@ -1,0 +1,12 @@
+Main(): signaling the default entry point of execution.
+
+source code: .cs file -> Compile -> Assembly
+Assembly:
+	unit of packaging and deployment in .NET, 
+	.exe: with entry point(executable)
+	.dll: whitout entry point(library)
+
+C# compiler: csc.exe (%SystemRoot%\Microsoft.NET\Framework\<framework-version>)
+
+csc MyProgram.cs -> MyProgram.exe
+csc /target:library MyProgram -> MyProgram.dll

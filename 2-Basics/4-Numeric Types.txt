@@ -1,0 +1,78 @@
+
+**Primitive types (except decimal) in CLR, supported directly by processor**
+
+	------------------------------------------------------
+	Singed Integer		Suffix	SystemType
+		sbyte(8b), 		SByte
+		short(16b), 		Int16
+		int(32b), 		Int32
+		long(64b),	L	Int64
+	Range:
+		-2^(i-1) ~ 2^(i-1)-1
+	------------------------------------------------------
+	Unsigned Integer:
+		byte(8), 		Byte
+		ushort(16), 		UInt16
+		uint(32), 	U	UInt32
+		ulong(64), 	UL,	Uint64
+	Range:
+		0 ~ 2^i-1
+	------------------------------------------------------
+	Real:
+		float(32),	F	Single		+- 10^(-45)~10^(38)
+		double(64),	D	Double		+- 10^(-324)~10^(308)	base 2
+		decimal(128),	M	Decimal		+- 10^(-28)~10^(28)	base 10
+
+	Constants:
+		int.MinValue, int.MaxValue	(** int.MinValue - 1 == int.MaxValue **)
+		double/float.NaN, 
+		double/float.PositiveInfinity, double/float.NegativeInfinity,
+		-0.0, -0.0f
+
+Note:
+1. Literal:
+	Integer:	127(decimal) / 0x7(hexadecimal)
+	Real:		(1.5)decimal / 1E06(exponential)
+	Infer:
+		a. contains "."/"E" => double
+		b. otherwise, order: int -> uint -> long -> ulong
+		c. GetType: 1E06.GetType()
+2. Conversion:
+	Implicit:	No precision loss
+	Explicit:	value loss
+	Be careful:
+		a. float f = (float)1.2; 			//1.2 is double
+
+		b. floating-point: preserve magnitude, may lose precision:
+		   int i=100000001; float f=i; int i2=(int)f; 	//i2 = 100000000, f=1E08
+
+		c. int => float/double:
+			No rounding
+
+3. Calculations:
+	+,-,*,/,%:	all numerics (except 8/16 bit integers)
+	++, --:		all numerics
+	Be carefull:
+		a. Integral "/": round towards 0
+		b. Integral overflow:
+			"checked" (+,-,*,/,++,--,explicit conversion) => OverflowException
+				int c = checked(a*b);
+				checked { c=a*b }
+			Make default:
+				compile: "/check+" arg
+				add "uncheck" in code
+			Constant value will always be checked: 
+				int.MaxValue + 1 => compile error
+		c. 8/16 bit Integerals
+			convert to larger
+			short x = 1, y = 1;
+			short z = x + y;	// Compile error, use (short)x+y
+
+		d. Infinity:
+			1.0 / 0.0 => Infinity, 1.0 / -0.0 => -Infinity,
+		   NaN:
+			0.0 / 0.0, Infinity - Infinity,
+		   Compare:
+			double.IsNaN(0.0/0.0)			// true
+			object.Equals(0.0/0.0, double.NaN)	// true
+			0.0/0.0 == double.NaN			//false

@@ -1,0 +1,114 @@
+1-Broadcaster & Subscriber
+	a. Broadcaster:
+		public delegate void DelegateHandler(int a, int b);	// Step1: Define delegate
+		public class Broadcaster
+		{
+			public event DelegateHandler PriceChanged;		// Step2: Define event
+			public int Price								// Step3: Broadcast
+			{
+				set	{ if(value > 2) { PriceChanged(1,value); } }
+			}
+		}
+	b. Subscriber
+		public class Subscriber
+		{
+			private broadCaster;
+			public Subscriber()
+			{
+				this.broadCaster = new BroadCaster();		// Step4: Create BroadCaster instance
+				this.broadCaster.PriceChanged += foo;		// Step5: Start listen
+			}
+			public void foo(int a, int b) {...}
+		}
+========================================================================================
+2-Inside
+	compile to:
+		public class BroadCaster
+		{
+			DelegateHandler _priceChanged;					// private delegate
+			public event DelegateHandler PriceChanged
+			{
+				add	{ _priceChanged += value; }
+				remove	{ _priceChanged -= value; }
+			}
+		}
+========================================================================================
+3-Event vs Delegate
+	only allow +=, -= on the event "PriceChanged", subscriber cannot:
+	a. Set PriceChanged = null
+	b. Change PriceChanged values other than itself's method
+	c. Invoke the PriceChanged manually: 
+			PriceChanged(a, b) => interfere other subscribers
+========================================================================================
+4-Standard Event Pattern
+
+		public class PriceChangedEventArgs : System.EventArgs							// Step1: inherit EventArgs
+		{
+			public readonly int X,Y;
+			public PriceChangedEventArgs (int x, int y)	{ X=x; Y=y; }
+		}
+		public class BroadCaster
+		{
+			private int price;
+			
+			public event EventHandler<PriceChangedEventArgs> PriceChanged;				// Step2: define event, used generic delegate
+			
+			protected virtual void OnPriceChanged (PriceChangedEventArgs e)				// Step3: Define OnXXX
+			{
+				if(PriceChanged != null) PriceChanged (this, e);
+			}
+			public int Price															// Step4: Fire event
+			{
+				set	{  OnPriceChanged( new PriceChangedEventArgs(price,value); ) }
+			}
+		}
+		public class Subscriber
+		{
+			private broadCaster;
+			public Subscriber()
+			{
+				this.broadCaster = new BroadCaster();									// Step5: Create BroadCaster instance
+				this.broadCaster.PriceChanged += foo;									// Step7: Start listen
+			}
+			public void foo(object sender, PriceChangedEventArgs e) 					// Step6: Really deal with event
+			{
+				// print e.X, e.Y ...
+			}
+		}
+	a. Delegate must
+				public delegate void EventHandler<TEventArgs>							// Framework's generic delegate
+					(object source, TEventArgs e) where TEventArgs : EventArgs;
+					
+			return void
+			has two parameters: (object, EventArg)
+			Name end with "EventHandler"
+	b. Must define OnXXX
+			protected, virtual, single param (EventArgs)
+			Name must match event
+	c. "EventHandler"
+			nongeneric predefined, can replace EventHandler<TEventArgs> when no data is needed
+			use OnPriceChanged(EventArgs.Empty) in Step 4
+========================================================================================
+5-Event Modifiers:
+	virtual / override / abstract / sealed / static
+========================================================================================
+6-Event Accessors
+	a. += / -=
+	b. if manually implement, compiler will not generate
+	c. When to manually implement?
+			a. when the event accessors are merely relays for another broadCaster
+			b. broadCaster has many events, but few subscribers 
+				(store subscriber's delegate instance in dictionary, save storage overhead for null delegate field refs)
+			c. when explicitly implement an interface (contains event):
+					
+					public interface IFoo { event EventHandler Ev; }
+					class Foo : IFoo
+					{
+						private EventHandler ev;			// Manual implementation
+						event EventHandler IFoo.Ev
+						{
+							add		{ ev += value; }
+							remove	{ ev -= value; }
+						}
+					}
+

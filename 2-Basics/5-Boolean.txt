@@ -1,0 +1,21 @@
+1-Storage:
+	require 1 bit
+	runtime use 1 byte of memory (minimum chunck, RT and processor can work efficiently)
+	BitArray (in System.Collections): 1 bit/bool
+
+2-Conversion:
+	No conversion bool <--> numerics
+
+3-Compare:
+	Value type
+	Ref type: based on reference
+		obj1 == obj2 //false
+		exception: string
+
+4-Operators(conditional)
+	Short-circut evaluation:
+		&&, ||
+	Non short-circut:
+		!, &, | (differ from c++, bitwise operator: only applied to numbers)
+	Ternary operator:
+		(a>b) ? a : b

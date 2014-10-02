@@ -1,0 +1,87 @@
+All delegate types implicitly derive from: System.MulticastDelegate, which inherits System.Delegate
+===============================================================================================
+1-How to define and use:
+	Step1: define delegate type, (return + params types)
+		delegate int Transformer (int x);
+
+	Step2: assign delegate instance
+		int Square(int x) {return x*x;}
+		Transformer t = Square		// Transformer t = new Transformer (Square)
+
+	Step3: use instance as function:
+		t(3)			// t.Invoke(3) => Square(3)
+===============================================================================================
+2-Use as method parameter
+	void foo(int[] values, Transformer t) { ... }
+===============================================================================================
+3-Multicast
+		t += WriteAnswer;
+		t += SquareRoot
+
+	a. Support: +, -, +=, -=
+		"immutable": creating new instance and assign it
+	b. Exec Order: FIF-exec
+	c. can be null
+	d. return value:
+		usually void
+		if not void, only the last one will be returned
+===============================================================================================
+4-Instance Delegate
+		class Integer { int Square(int x) {...} }
+		Integer x = new Integer();
+		t = x.Square;
+
+	a. assign a member function(non-static)
+	b. must create an object first
+===============================================================================================
+5-Generic Delegate Type
+		public delegate T Transformer<T> (T arg);
+		Transformer t1 = SquareInt
+		Transformer t2 = SquareDouble
+===============================================================================================
+6-Func/Action
+	Define (int System ns):
+		delegate TResult Func <out TResult>			();			// covariant
+		delegate TResult Func <in T, out TResult>		(T arg);
+		delegate TResult Func <in T1, in T2, out TResult>	(T1 arg1, T2 arg2);
+
+		delegate void Action					();
+		delegate void Action <in T>				(T arg);		// contravariant
+		delegate void Action <in T1, int T2>			(T1 arg1, T2 arg2);
+
+		// up to T16
+
+	Use in method:
+		void foo<T> (T[] values, Func<T,T> t) { ... t(values[1]); ... }
+
+	Assign:
+		foo (new int[]{1, 2, 3}, Square);
+	Note:
+		ref/out/pointer parameters not covered
+===============================================================================================
+7-Compatibility
+	a. Type:
+		a.Not compatible with each other, even with identical signiture
+		b.Equal: if two delegates ref the same methods in same order
+		c.Copy Construction:
+			D2 d2 = new D2(d1);	// legal, if same signature
+	b. Parameter:
+			pass "string" -> "void foo (Object obj)"			(Polymorphism)
+			=> "delegate void D (string)" <- "void foo (Object obj)"	(contravariance)
+
+		"contravariant" only for reference conversion
+	c. Return type:
+			Object obj <- "string foo()"					(Polymorphism)
+			=> "delegate Object D ()" <- "string foo()"			(covariance)
+
+===============================================================================================
+8-When to use delegate than interface:
+	Use interface:
+		class Square : ITransformfer { public int Transform (int x) { return x*x; } }
+		void foo(int[] values, ITransformer t) { ... }
+		foo(new int[]{1,2,3}, new Square());
+
+	a. The interface has only one method
+	b. Multicast is needed
+	c. Need to implement the interface multiple times (???)
+

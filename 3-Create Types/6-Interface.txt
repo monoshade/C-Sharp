@@ -1,0 +1,115 @@
+1-Members can only be:
+	a. Methods / properties / events / indexers
+	b. "abstract": but don't need the key words
+	c. "public":
+		(Interface itself can be non-public)
+		don't add public in definition
+		add public in implementation (can't be others)
+===========================================================================================
+2-Cast Object -> Interface it implements
+	
+	example:
+		public interface IWorker 
+		{
+			bool Decrease();
+			object Current { get; }
+		}
+		class Wrapper{
+			private class Worker : IWorker
+			{
+				int value = 20;
+				public bool Decrease() { return value-- > 0; }
+				public object Current { return value; }
+			}
+			static void Foo(IWorker iw)
+			{
+				while(iw.Decrease()) { Console.Write(iw.Current); }
+			}
+			static void Main()
+			{
+				Foo(new Worker());
+			}
+		}
+
+	a. Purpose1: Polymorphism (or delegate)
+		Different class implements differently
+	b. Accessibility
+		Not related to the class Worker (as long as you can get the instance)
+	c. Purpose2:
+		Implement two interfaces has same function:
+			interface I1{ void foo(); }
+			interface I2{ int foo(); }
+		Implement:
+			public class concrete:I1, I2{  
+				public void foo(){...}  
+				public int I2.foo() {...}
+			}
+		Call:
+			obj.foo()	// I1.foo
+			((I2)obj).foo()	// I2.foo
+===========================================================================================
+3-Explicit Implementation:
+	public class concrete : I2
+	{
+		public int I2.foo() {...}	// "Explicit Implementation"
+	}
+	Call:
+		((I2)obj).foo()
+
+	Problem: Can't call obj.foo() directly!!
+===========================================================================================
+4-Extend Interface:
+	public interface I2: I1 { void extraFoo(); }
+===========================================================================================
+5-Virtually Implement
+	a. By default: sealed
+	b. Use "virtual" + "override"
+	c. Cannot use on: Explicitly implemented member (can "reimplement")
+===========================================================================================
+6-Reimplement ( "new" in a subclass )
+	Whether or not virtual in Base
+	Whether or not explicit in Base
+
+	public class Child : Base, I
+	{
+		public new void foo() {...}
+	}
+
+	Problems:
+	a. Implicitly Implemented:
+
+		public class Base : I { public void foo() {...} }
+
+		Child c = new Child();
+		c.foo();		// Case 1: Child.foo()
+		((I)c).foo();		// Case 2: Child.foo()
+		((Base)c).foo();	// Case 3: Base.foo()
+		
+		*** Problem when using Base ref for Polymorphism, OK if always casting to Interface ***
+
+	b. Explicitly Implemented:
+		
+		public class Base : I { public void I.foo() {...} }
+
+		a. No Polymorphism problem (Can't call by Case 3)
+		b. Child has no way to call Base.Foo()
+		c. Potential danger: Base does not expect this method been reimplemented
+
+	Solution:
+		a. Use "virtual" for implicitly implemented member
+		b. Use pattern for explicitly implemented member:
+			public class Base : I
+			{
+				void I.foo()	{ foo(); }		// Still only allow calling from Casting to Interface
+				protected virtual void foo() { ... }
+			}
+			public class Child : Base, I
+			{
+				protected override void foo() { ... }
+			}
+===========================================================================================
+7-Interface & Boxing
+	Struct S : I { public void foo() {} }
+	s.foo();	// no Boxing
+	I i = s;	// Boxing 
+	i.foo();

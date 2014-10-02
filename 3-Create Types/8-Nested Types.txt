@@ -1,0 +1,22 @@
+Declared within another type (namespace doesn't count)
+
+1-Features:
+	a-Same access as enclosing type + enclosing type's private member
+	b-Can use private / protected / protected internal
+	c-Default: private
+	d-Access the type: + outer type's name (as a static memeber)
+
+		public class OuterType
+		{
+			public enum Color { Red, Blue }
+		}
+
+		OuterType.Color color = OuterType.Color.Red;
+
+
+2-All Types can be nested inside either a class or a struct
+	classes, structs, interfaces, delegates, enums
+
+3-When to use
+	a. need stronger access control restriction
+	b. nested class must access private mumber of the containing class

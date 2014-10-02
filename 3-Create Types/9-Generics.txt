@@ -1,0 +1,87 @@
+1-Generics vs Inheritance
+	a. two ways to reuse code
+		Inheritance: polymorphism
+		Generic: "placeholder" template
+	b. advantage:
+		increase type safety
+		reduce casting & boxing
+
+==========================================================================================
+2-Open Type & Closed Type
+	Open Type: Stack<T>
+	Closed Type: Stack<int> (runtime)
+
+==========================================================================================
+3-Why exist?
+	Compare with "Object"
+
+	public class ObjectStack { ... }
+	ObjectStack stack = new ObjectStack();
+	
+	stack.Push("s");		// no error
+	int i = (int) stack.Pop();	// Downcast - runtime error
+
+==========================================================================================
+4-Only Methods/Types can introduce type parameter
+	a. class / structs / interfaces / delegates / Methods
+	b. by using <T>
+	c. Not including: Property/indexer/event/field/constructor/operator...
+	d. they can use T introduced by enclosing type (as long as no <>)
+
+==========================================================================================
+5-Only Open Type at runtime:
+	Type a = typeof(A<>)	// "Unbound"
+
+==========================================================================================
+6-"default"
+	static void foo<T> (T[] arr)
+	{
+		foreach(T e in arr) e = default(T);	// ref-type: null; value type: bitwise 0
+	}
+
+==========================================================================================
+7-Adding constraints:
+	a. "naked type" (derive from):
+		class Stack<T>
+		{
+			Stack<U> FilterStack<U>() where U : T { ... }
+		}
+	b. "parameterless constructor" (has this constructor):
+		static void foo<T>() where T : new()
+		{
+			new T();
+		}
+
+==========================================================================================
+8-Subclassing Generic Type
+	Can keep Open or Close the type
+
+==========================================================================================
+9-Self-Reference (***)
+	a. Closing a type:
+		class Obj : ICompare<Obj> { ... }
+	b. Open type:
+		class Foo<T> where T : ICompare<T> { ... }	// T implements/inherits an interface
+		class Bar<T> where T : Bar<T> { ... }		// T is a subclass of Bar<T>
+
+==========================================================================================
+10-Static data
+	unique for each closed type.
+
+==========================================================================================
+11-Conversions
+	a. C# Supported Conversions:
+		Numeric / Reference / Boxing-Unboxing / Custom (operator overloading)
+	b. Compile Error:
+		If compiler can't decide which conversion to use
+		Example:
+			foo<T> (T arg){  RefType ref = (RefType)arg; }	// can be custom / ref conversion
+	c. solution 1:
+		RefType ref = arg as RefType;		// as cannot be costom
+		if(ref != null) ...
+	
+	d. general solution:
+		RefType ref = (RefType) (object) arg;	// conversion to/from object is only boxing/reference
+
+
+

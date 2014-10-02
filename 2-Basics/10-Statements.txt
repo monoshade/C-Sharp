@@ -1,0 +1,27 @@
+
+1-Declaration:
+	A variable's scope extends in both directions througout its code block
+
+2-Expression Statement:
+	Change change or call something that might change state.
+	a. Assignment expression
+	b. Method call
+	c. Object instantiation expr
+
+3-Selection Statement:
+	Control the flow of the program.
+	a. Selection statement (if, switch)
+	b. Conditional operators (?:)
+	c. Loop (while, do..while, for, foreach)
+
+	Jump:
+		break, continue, goto, return, throw
+
+	A jump out of a try block will always execute the finally block
+	A jump cannot be made from inside to the out side of a finally block (except via throw)
+
+4-Others
+	a. using block:
+		calling Dispose on objects that implement IDisposable
+	b. lock statement:
+		calling the Enter and Exit methods of the Monitor class

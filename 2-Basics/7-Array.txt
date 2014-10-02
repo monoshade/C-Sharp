@@ -1,0 +1,49 @@
+
+1-Default value:
+	"Bitwise zeroing of memory"
+	
+	Value type:
+		0. eg:
+			public struct Point {public int X, Y;}
+			Point[] a = new Point[1000];
+			int x = a[500].X;	// 0
+	Ref type:
+		null. eg:
+			public class Point {public int X, Y;}
+			Point[] a = new Point[1000];
+			int x = a[500].X;	// RT error
+			
+	Array itself is always reference type.
+
+2-Initialization:
+	1-D:
+		Method 1:
+		int[] x = new int[10];
+		for(int i=0; i<x.Length; i++) x[i] = i;
+			"Length": 
+				cannot be changed once created.
+		
+		Method 2:
+		int[] x = new int[] {1, 2, 3}; // or
+		int[] x = {1, 2, 3};
+	
+	2-D:
+		a. Rectangular Array:
+				int[,] x = new int[3,3];
+					GetLength(0): rows
+					GetLength(1): cols
+					
+		b. Jagged Array:
+				int[][] x = new int[3][];
+				
+		c. Init:
+			var retMatrix = new int[,]{{1,2,3}, {4,5,6}, {7,8,9}};
+			var jagMatrix = new int[][]
+			{
+				new int[] {1,2,3},
+				new int[] {4,5,6},
+				new int[] {7,8,9}
+			};
+
+3-Bounds Checking:
+	Runtime, IndexOutOfRangeException

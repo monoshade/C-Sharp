@@ -1,0 +1,19 @@
+1-Difference with Class:
+	a. Value type
+	b. Doesn't support Inheritance (other than deriving from object/System.ValueType)
+	c. Can have all members from a class, except:
+		Parameterless constructor
+		Finalizer
+		Virtual Members
+	d. Does not instantiate instance on the heap (save time):
+		Creating an array of value-type, only 1 heap allocation
+
+2-Contructor
+	a. Parameterless constructor
+		Implicitly exists, can't be overriden
+		bitwise zeroing
+
+	b. Customized constructor:
+		Must assign each field
+
+	c. Can't use field initializers in struct

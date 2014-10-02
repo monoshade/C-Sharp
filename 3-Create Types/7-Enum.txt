@@ -1,0 +1,44 @@
+1-A Value Type:
+	a group of named numeric constant
+===========================================================================
+2-Using non-int underlying value:
+
+	public enum Color : byte {Red=4, Blue}	// Blue == 5
+	
+	Note: using 0 as first value for default initialization
+===========================================================================
+3-Conversion:
+	Color c = (Color) Color.Blue;
+	Color c = (Color) System.Enum.Parse(typeof(Color), "Red");
+===========================================================================
+4-Flags Enums
+
+	[Flags]
+	public enum BorderSides { None=0, Left=1, Right=2, Top=4, Bottom=8 }
+
+	a. Combine enums:
+	
+		BorderSides leftRight = BorderSides.Left | BorderSides.Right;
+		leftRight.ToString() => "Left, Right"
+
+		leftRight ^= BorderSides.Right
+		leftRight.ToString() => "Left"
+
+	b. For non-combinable Enums, ToString() => a number
+===========================================================================
+5-Enum Operators
+	=, ==, <, >, <=, >=, +, -, +=, -=, ++, --, sizeof
+	&, |, ~, ^, |=, ^=, &=
+===========================================================================
+6-Type-Safety Issues
+	a. No error/exceptions will be thrown if the value is not defined. Use:
+
+		Enum.IsDefined(typeof(BorderSides), left);
+
+	b. Does not work for Flags Enums. Write helper:
+
+		static bool IsFlagDefined(Enum e)
+		{
+			decimal d;
+			return !decimal.TryParse(e.ToString(), out d);
+		}

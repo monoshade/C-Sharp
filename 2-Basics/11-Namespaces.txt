@@ -1,0 +1,76 @@
+A namespace is a domain for type names. Hierarchically.
+
+1. Note:
+	Namespace is independent of assemblies, which are units of deployment(i.e.: .exe, .dll)
+	Namespace have no impact on member visibility: public/internal/prrivate ..
+
+2. Define a namespace:
+	namespace Outer.Middle.Inner {class Class1{} class Class2{}} <==>
+	namespace Outer{
+		namespace Middle{
+			namespace Inner{}
+		}
+	}
+
+ 	Outer: resides in Global namespace
+
+	using ... : imports a namespace
+
+	Aliasing: using PropertyInfo = System.Reflection.PropertyInfo
+
+3. Rules
+	a. Name Scoping:
+		Names in Outer/Middle can be used unqualified within Inner
+
+	b. Name Hiding:
+		Inner hides same name in Outer. 
+		Use Outer.foo() to call outer names
+
+	c. Repeat namespace in multiple files
+		as long as no conflicts
+
+	d. Nested using directive:
+		only  valid in the used block, not valid in other blocks, even with the same namespace. Example:
+
+		namespace N1{ class Class1{} }
+
+		namespace N2{
+			using N1;
+			class Class2 : class1 {}
+		}
+
+		namespace N2{
+			class Class3 : class1 {}	// Compile error
+		}
+
+4. Advanced Features
+	a. Extern
+		use case: identical Namespace.typename, come from different files. Example:
+
+		// csc /r:W1=Widgets1.dll /r:W2=Widgets2.dll application.cs
+		extern alias W1;
+		extern alias W2;
+		class Test{
+			static void Main(){
+				W1.Widgets.Widgest w1 = new W1.Widgets.Widgets();
+				W2.Widgets.Widgest w2 = new W2.Widgets.Widgets();
+			}
+		}
+	b. Global
+		use case: 
+			Namespace N{
+				class A{
+					class B{
+						public void Main(){ new A.B(); }	// want to call global A.B
+					}
+				}
+			}
+			Namespace A{
+				class B{}
+			}
+		
+		solution:
+			new global::A.B();
+			
+			Also for extern:
+			W1::Widegets ....

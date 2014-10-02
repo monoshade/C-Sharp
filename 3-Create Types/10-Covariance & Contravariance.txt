@@ -1,0 +1,62 @@
+
+	"wherever can input a base, can input a child"	=> True for non-generic case(implicit ref conversion)
+							=> Not true for generic class (container)
+
+============================================================================================================
+1-Covariance
+	a. If Child : Base (inherits/implements, "compatible"), then X<Child> : X<Base>.
+
+			X<Base> b = new X<Child>() 	// can do "implicit refernce conversion"
+
+	b. X = class, does not support this. Example: 
+	
+			Container<Base> cb = Container<Child> 	// won't compile. 
+
+		a. Major concern:
+			if legal, this would cause runtime error, when assign another type to cb:
+
+				cb.AddMember(new Child2())	// Child2 may conflict with Child
+
+		b. Causing Reusability issue:
+			Can't pass child to utility function
+
+				class Util {  static void Update (Container<Base> base) { ... }	}
+		c. solution 1:
+				class Util {  static void Update<T> (Container<T> base) : where T : Base { ... }
+
+	c. X = Array, support.
+		historical reason.
+		can cause runtime error. (same in b.a)
+
+	d. X = interface, partially support.
+		a. "out"
+			public interface IPopable<out T> { T Pop(); }
+			class Container<T> : IPopable<T> { ... }
+			IPopable<Base> base = new Container<Child>	// legal, due to the limited contract
+
+		b. *** wherever can output base, can output child ***	=> Implicit reference conversion
+
+		c. fully type-safe
+		d. solution 2:
+			class Util {  static void Update (IPopable<Base> base) {...}  }
+===========================================================================================================
+2-Contravariance
+	a. If Child : Base, then X<Child> c = new X<Base>()  is legal
+	b. x = interface, partially support.
+		a. "in"
+			public interface IPushable<in T> { void Push (T obj); }
+			class Container<T> : IPushable<T> { ... }
+			IPushable<Child> child = new Container<Base>();
+			child.Push(new child());			// legal
+
+		b. wherever can input a base, can input a child
+								=> child container interface ref -> base object container (***), 
+								=> base container can hold child object
+			+ push type is fixed (child)
+								=> won't cause conflict
+
+
+
+
+
+

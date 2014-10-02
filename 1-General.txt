@@ -1,0 +1,64 @@
+C#: 
+Genreal-purpose, type safe, OO programming language.
+Platform neutral.
+Goal: Simplicity, expressiveness, performance.
+
+1-Object Orientation
+	Commons:
+		Encapsulation, Inheritance, Polymorphism.
+	Distinctions:
+		Unified type system(all types share a common base)
+		More types:
+			class (no multiple inheritance),
+			interface (useful in multiple inheritance)
+		More function members:
+			Methods,
+			Properties(Encapsulate a piece of an object's state),
+			Events(Acting on object's state change)
+
+2-Type safety
+	Static typing, type satety at compile time.
+	Strongly typed (needs explicit conversion)
+
+3-Memory Management
+	Common Language Runtime: GC
+	Pointers: only permitted in blocks marked "unsafe"
+
+4-Platform Support
+	C# depends on a runtime equipped with a host of automatic memory management and exception handling.
+	CLR:
+		Performs as a host of numerous runtime services.(Mem management, loading libraries, security)
+		Runtime for executing Managed Code.
+			Code -> Compile -> 
+			Managed Code(IL) -> Package ->
+			Assembly (executable/library, .exe/.dll) -> Load&Convert (CLR's JIT comipler)
+			Native Machine Code
+		Laguange neutral (C#, VB.NET, Managed C++...)
+	.Net Framework:
+		CLR + Libraries
+	Windows Runtime(WinRT):
+		Execution Interface and Runtime Environment for accessing libraries in a language-neutral & OO fashion,
+		Enhanced version of Component Object Model(COM)
+
+5-Key features
+	1-Delegates/Events
+	2-Lambda expression/Anonymous methods
+	3-Collections/LINQ query
+	4-XML
+	5-Disposal/GC
+	6-Diagnostics/Code Contracts
+	7-Concurrency & Asynchrony
+	8-Streams and IO
+	9-Networking
+	10-Serialization
+	11-Assemblies
+	12-Reflection and Metadata
+	13-Dynamic Programming
+	14-Security
+	15-Advanced Threadling
+	16-Parallel Programming
+	17-Application Domain
+	18-Native and COM
+	19-Regular Expressions
+	
+	
